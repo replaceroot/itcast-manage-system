@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { userlogin } from '@/api/users.js'
 export default {
   // 定义数据
   data () {
@@ -50,12 +51,31 @@ export default {
       // 登录验证的时候，表单有一个validate函数，这个函数可以真正的实现表单元素的数据验证，这个验证与之前的，rules规则对应，当验证完成之后，会返回一个值给给回调函数，如果是true，说明验证通过，否则就不通过
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+          console.log('这里的this是:', this)
           // 验证通过,就会发起登录请求
-          console.log('ok')
+          console.log(this.loginForm)
+          userlogin(this.loginForm)
+            .then(result => {
+              if (result.data.meta.status === 400) {
+                this.$message({
+                  message: result.data.meta.msg,
+                  type: 'error'
+                })
+              } else {
+                // 路由跳转
+                this.$router.push({ name: 'Home' })
+              }
+            })
+            .catch(() => {
+              this.$message({
+                message: '服务器异常,请重试',
+                type: 'error'
+              })
+            })
         } else {
           // 给出用户提示
           this.$message({
-            message: '登录失败!',
+            message: '数据输入不合法',
             type: 'error'
           })
           // 失败了一定要返回false,否则还会发送请求

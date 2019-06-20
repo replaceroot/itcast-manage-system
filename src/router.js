@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 // 引入登录组件
 import Login from '@/views/login.vue'
+import Home from '@/views/Home.vue'
 Vue.use(VueRouter)
 
 // 创建路由模块
@@ -12,6 +13,11 @@ var router = new VueRouter({
       name: 'Login',
       path: '/login',
       component: Login
+    },
+    {
+      name: 'Home',
+      path: '/home',
+      component: Home
     }
   ]
 })
