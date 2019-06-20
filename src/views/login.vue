@@ -9,14 +9,14 @@
         class="demo-ruleForm"
       >
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
+          <el-input v-model="loginForm.username" placeholder="请输入用户名" prefix-icon="myicon myicon-user"></el-input>
         </el-form-item>
 
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" placeholder="请输入密码"></el-input>
+          <el-input v-model="loginForm.password" placeholder="请输入密码" prefix-icon="myicon myicon-key"></el-input>
           </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="login-btn">登陆</el-button>
+          <el-button type="primary" class="login-btn" @click="login">登陆</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -41,6 +41,27 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' }
         ]
       }
+    }
+  },
+  methods: {
+    // 登陆
+    login () {
+      // 实现用户的数据验证，因为之前的rules只是一个提示信息布局，并不会真正的阻止用户的登陆请求
+      // 登录验证的时候，表单有一个validate函数，这个函数可以真正的实现表单元素的数据验证，这个验证与之前的，rules规则对应，当验证完成之后，会返回一个值给给回调函数，如果是true，说明验证通过，否则就不通过
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          // 验证通过,就会发起登录请求
+          console.log('ok')
+        } else {
+          // 给出用户提示
+          this.$message({
+            message: '登录失败!',
+            type: 'error'
+          })
+          // 失败了一定要返回false,否则还会发送请求
+          return false
+        }
+      })
     }
   }
 }
