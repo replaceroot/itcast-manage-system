@@ -1,38 +1,33 @@
 <template>
+  <div class="login">登陆</div>
   <div class="login">
     <div class="container">
-      <img src="../assets/avatar.jpg" class="avatar">
-      <el-form
-        :model="loginForm"
-        :rules="rules"
-        ref="loginForm"
-        class="demo-ruleForm"
-      >
+      <img src="../assets/avatar.jpg" alt class="avatar">
+      <el-form :model="loginForm" :rules="rules" ref="loginForm" class="demo-ruleForm">
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
-
         <el-form-item prop="password">
           <el-input v-model="loginForm.password" placeholder="请输入密码"></el-input>
-          </el-form-item>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" class="login-btn">登陆</el-button>
         </el-form-item>
       </el-form>
     </div>
   </div>
-</template>
+</template>	</template>
 
-<script>
-export default {
-  // 定义数据
+ <script>	<script>
+export default {	export default {
+   // 定义数据
   data () {
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: ''
       },
-      // 添加验证规则
+      //   添加验证规则
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -43,11 +38,10 @@ export default {
       }
     }
   }
-}
-</script>
-
+}	}
+</script>	</script>
 <style lang="less" scoped>
-.login {
+<style lang="less" scoped > .login {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -78,4 +72,4 @@ export default {
     }
   }
 }
-</style>
+</style>	</style>
