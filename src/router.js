@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Login from '@/views/login.vue'
 import Home from '@/views/Home.vue'
 import Welcome from '@/views/Welcome.vue'
+import Users from '@/views/users/User.vue'
 Vue.use(VueRouter)
 
 // 创建路由模块
@@ -25,8 +26,14 @@ var router = new VueRouter({
       children: [
         {
           name: 'Welcome',
+          // 注意嵌套路由中的路径千万不要加/否则会破坏路由的层级
           path: 'welcome',
           component: Welcome
+        },
+        {
+          name: 'Users',
+          path: 'users',
+          component: Users
         }
       ]
     }

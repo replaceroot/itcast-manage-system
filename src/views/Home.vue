@@ -17,7 +17,7 @@
               <i class="el-icon-location"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="/user">
+            <el-menu-item index="/home/users">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>用户列表</span>
@@ -62,7 +62,30 @@
 </template>
 
 <script>
-export default {}
+import { getAllList } from '@/api/users.js'
+export default {
+  data () {
+    return {
+      query: '',
+      pagenum: 1,
+      pagesuze: 10
+    }
+  },
+  // 页面加载完成就去后去用户列表的数据
+  mounted () {
+    getAllList({
+      query: this.query,
+      pagenum: this.pagenum,
+      pagesize: this.pagesize
+    })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+}
 </script>
 
 <style lang="less" scoped>
