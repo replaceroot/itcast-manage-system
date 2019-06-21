@@ -13,3 +13,12 @@ export const userlogin = (params) => {
     params: params
   })
 }
+
+/* export const userlogin(params){
+  retrun axios({
+    url: 'login',
+    method: 'post',
+    params:params
+  })
+}
+ */
