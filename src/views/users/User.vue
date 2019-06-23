@@ -26,7 +26,7 @@
       <el-table-column prop="mobile" label="电话" width="300"></el-table-column>
       <el-table-column label="状态" width="120">
         <template slot-scope="scope">
-          <el-switch v-model="value2" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949" @change="updateStatus(scope.row.id,scope.row.mg_state)"></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -98,7 +98,7 @@
   </div>
 </template>
 <script>
-import { getAllList, addUser, editUser, deleteUser } from '@/api/users.js';
+import { getAllList, addUser, editUser, deleteUser, updateUserStatus } from '@/api/users.js'
 export default {
   data () {
     return {
@@ -160,6 +160,19 @@ export default {
     }
   },
   methods: {
+    // 修改用户状态
+    updateStatus (id, type) {
+      updateUserStatus(id, type)
+        .then(res => {
+          console.log(res)
+          if (res.data.meta.status === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.meta.msg
+            })
+          }
+        })
+    },
     // 根据id删除用户
     del (id) {
       // 弹出删除确认框
@@ -227,7 +240,7 @@ export default {
         }
       })
     },
-    // 新增用户
+    // 新增用户a
     add () {
       // 再次进行用户数据的验证
       this.$refs.addForm.validate(valid => {
