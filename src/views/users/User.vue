@@ -76,13 +76,40 @@
         <el-button type="primary" @click="add">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!-- 编辑用户对话框 -->
+    <el-dialog title="编辑用户" :visible.sync="editDialogFormVisible">
+      <el-form ref="editForm" :model="editForm" :rules="rules" :label-width="'120px'">
+        <el-form-item label="用户名">
+          <el-input v-model="editForm.username" auto-complete="off" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="editForm.email" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" prop="mobile">
+          <el-input v-model="editForm.mobile" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editDialogFormVisible = false;$refs.editForm.resetFields()">取 消</el-button>
+        <el-button type="primary" @click="edit">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { getAllList, addUser } from '@/api/users.js'
+import { getAllList, addUser, editUser } from '@/api/users.js'
 export default {
   data () {
     return {
+      // 控制编辑用户对话框的显示和隐藏
+      editDialogFormVisible: false,
+      editForm: {
+        id: '',
+        username: '',
+        email: '',
+        mobile: ''
+      },
       // 控制新增用户对话框的显示和隐藏
       addDialogFormVisible: false,
       // 新增数据的表单数据绑定对象
@@ -104,11 +131,19 @@ export default {
         email: [
           // wuhu0723@126.com
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { message: '请输入合法的邮箱', pattern: /\w+[@]\w+[.]\w+/, trigger: 'blur' }
+          {
+            message: '请输入合法的邮箱',
+            pattern: /\w+[@]\w+[.]\w+/,
+            trigger: 'blur'
+          }
         ],
         mobile: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
-          { message: '请输入正确的手机号', pattern: /^1\d{10}$/, trigger: 'blur' }
+          {
+            message: '请输入正确的手机号',
+            pattern: /^1\d{10}$/,
+            trigger: 'blur'
+          }
         ]
       },
       // 总记录数
@@ -125,6 +160,39 @@ export default {
     }
   },
   methods: {
+    // 编辑用户
+    edit () {
+      this.$refs.editForm.validate(valid => {
+        if (valid) {
+          editUser(this.editForm)
+            .then(res => {
+              console.log(res)
+              if (res.data.meta.status === 200) {
+                this.$message({
+                  type: 'success',
+                  message: res.data.meta.msg
+                })
+                // 隐藏对话框
+                this.editDialogFormVisible = false
+                // 表单元素的数据重置
+                this.$refs.editForm.resetFields()
+                // 数据刷新
+                this.init()
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.data.meta.msg
+                })
+              }
+            })
+            .catch(() => {
+              console.log('err')
+            })
+        } else {
+          return false
+        }
+      })
+    },
     // 新增用户
     add () {
       // 再次进行用户数据的验证
@@ -176,8 +244,15 @@ export default {
       this.pagenum = val
       this.init()
     },
+    // 单机编辑弹出对话框，加载默认数据
     handleEdit (obj) {
       console.log(obj)
+      // 让弹出框显示
+      this.editDialogFormVisible = true
+      this.editForm.id = obj.id
+      this.editForm.username = obj.username
+      this.editForm.email = obj.email
+      this.editForm.mobile = obj.mobile
     },
     // 获取数据
     init () {
